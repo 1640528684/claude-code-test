@@ -4,66 +4,43 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project overview
 
-A Python project that starts from a single-file script at `claude_code_test/claude_py_test.py`.
+Expo (React Native) + TypeScript cross-platform mobile app. Targets iOS App Store and Android Google Play. Bootstrapped with Expo SDK 52 and React Native 0.76.
 
 ## Development commands
 
-- **Run the script**: `python claude_code_test/claude_py_test.py`
+```bash
+npm start          # Start Expo dev server
+npm run android    # Start with Android emulator
+npm run ios        # Start with iOS simulator
+npm run web        # Start web version
+npm run lint       # ESLint across all .ts/.tsx files
+npm run format     # Prettier formatting
+npm run typecheck  # TypeScript type checking (no emit)
+```
 
-There is no build step, test runner, linter, or package manager configured yet.
-## Coding Guidelines
+Run a single file's type errors: `npx tsc --noEmit --pretty <path>`
 
-Tradeoff: These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+## Architecture
 
-### Think Before Coding
-Don't assume. Don't hide confusion. Surface tradeoffs.
-Before implementing:
+```
+src/
+  components/    Reusable UI components
+  screens/       Full screen-level components
+  navigation/    React Navigation config and navigators
+  hooks/         Custom React hooks
+  utils/         Pure utility functions
+  types/         Shared TypeScript type definitions
+  constants/     App-wide constants (strings, config values)
+  services/      API clients, external service wrappers
+App.tsx          Root component (entry point)
+app.json         Expo configuration (app name, icons, bundle IDs)
+```
 
-- State your assumptions explicitly. If uncertain, ask.
-- If multiple interpretations exist, present them - don't pick silently.
-- If a simpler approach exists, say so. Push back when warranted.
-- If something is unclear, stop. Name what's confusing. Ask.
+Current package IDs: `com.mashaojie.claudecodetest` (Android) / same as bundle identifier (iOS).
 
-### Simplicity First
-Minimum code that solves the problem. Nothing speculative.
-- No features beyond what was asked.
-- No abstractions for single-use code.
-- No "flexibility" or "configurability" that wasn't requested.
-- No error handling for impossible scenarios.
-- If you write 200 lines and it could be 50, rewrite it.
+## Code style
 
-Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
-
-### Surgical Changes
-Touch only what you must. Clean up only your own mess.
-When editing existing code:
-
-- Don't "improve" adjacent code, comments, or formatting.
-- Don't refactor things that aren't broken.
-- Match existing style, even if you'd do it differently.
-- If you notice unrelated dead code, mention it - don't delete it.
-
-When your changes create orphans:
-
-- Remove imports/variables/functions that YOUR changes made unused.
-- Don't remove pre-existing dead code unless asked.
-
-The test: Every changed line should trace directly to the user's request.
-
-### Goal-Driven Execution
-Define success criteria. Loop until verified.
-Transform tasks into verifiable goals:
-
-- "Add validation" → "Write tests for invalid inputs, then make them pass"
-- "Fix the bug" → "Write a test that reproduces it, then make it pass"
-- "Refactor X" → "Ensure tests pass before and after"
-
-For multi-step tasks, state a brief plan:
-
-[Step] → verify: [check]
-[Step] → verify: [check]
-[Step] → verify: [check]
-
-Strong success criteria let me loop independently. Weak criteria ("make it work") require constant clarification.
-
-These guidelines are working if: fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+- TypeScript strict mode enabled
+- Prettier: single quotes off, trailing commas all, 100 print width
+- ESLint: flat config (`eslint.config.mjs`) with TypeScript and React plugins
+- No PropTypes needed — use TypeScript interfaces (rule disabled)
